@@ -194,7 +194,7 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
           "undoManager.isEnabled": true,
           model: this.sharedModel,
           initialContentAlignment: go.Spot.Right,
-          padding: new go.Margin(TimelineHeight, 0, 0, 0),
+          padding: new go.Margin(TimelineHeight + 10, 0, 0, 0),
           hasVerticalScrollbar: false,
           allowMove: false,
           allowCopy: false,
@@ -204,10 +204,10 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
               {
                 alignment: go.TreeLayout.AlignmentStart,
                 compaction: go.TreeLayout.CompactionNone,
-                layerSpacing: 16,
+                layerSpacing: 28,
                 layerSpacingParentOverlap: 1,
                 nodeIndentPastParent: 1,
-                nodeSpacing: 0,
+                nodeSpacing: 10,
                 portSpot: go.Spot.Bottom,
                 childPortSpot: go.Spot.Left,
                 arrangementSpacing: new go.Size(0, 0)
@@ -219,7 +219,7 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
 
     myTasks.nodeTemplate =
       $(go.Node, "Horizontal",
-        { height: 20 },
+        { height: 56 },
         new go.Binding("isTreeExpanded").makeTwoWay(),
         $("TreeExpanderButton", { portId: "", scale: 0.85 }),
         $(go.TextBlock,
@@ -288,7 +288,7 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
         });
 
     myGantt.add($(go.Part, "Grid",
-      { layerName: "Grid", position: new go.Point(-10, 0), gridCellSize: new go.Size(3000, GridCellHeight) },
+      { layerName: "Grid", position: new go.Point(-10, 0), gridCellSize: new go.Size(3000, GridCellHeight), defaultSeparatorPadding: 10 },
       $(go.Shape, "LineH", { strokeWidth: 0.5 })
     ));
 
@@ -336,13 +336,13 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
         new go.Binding("resizable", "isTreeLeaf").ofObject(),
         new go.Binding("isTreeExpanded").makeTwoWay(),
         $(go.Shape,
-          { name: "SHAPE", height: 18, margin: new go.Margin(1, 0), strokeWidth: 0, fill: "gray" },
+          { name: "SHAPE", height: 28, margin: new go.Margin(40  - 28, 0), strokeWidth: 0, fill: "gray" },
           new go.Binding("fill", "color"),
           new go.Binding("width", "duration", convertDurationToW).makeTwoWay(convertWToDuration),
-          new go.Binding("figure", "isTreeLeaf", leaf => leaf ? "Rectangle" : "RangeBar").ofObject()),
+          new go.Binding("figure", "isTreeLeaf", leaf => "Rectangle" ).ofObject()),
           // "RangeBar" is defined above as a custom figure
         $(go.TextBlock,
-          { font: "8pt sans-serif", alignment: go.Spot.TopLeft, alignmentFocus: new go.Spot(0, 0, 0, -2) },
+          { font: "12pt sans-serif", alignment: go.Spot.LeftCenter, alignmentFocus: new go.Spot(0, 0, 0, 5) },
           new go.Binding("text"),
           new go.Binding("stroke", "color", c => go.Brush.isDark(c) ? "#DDDDDD" : "#333333"))
       );

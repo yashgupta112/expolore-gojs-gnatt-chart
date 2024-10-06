@@ -4,8 +4,8 @@ import { StartDate } from './goChartGantt';
 // const StartDate = new Date();
 
 
-export const GridCellHeight = 20; // document units
-export const GridCellWidth = 12;  // document units per day
+export const GridCellHeight = 60; // document units
+export const GridCellWidth = 36;  // document units per day
 export const TimelineHeight = 24; // document units
 
 export const MsPerDay = 24 * 60 * 60 * 1000;

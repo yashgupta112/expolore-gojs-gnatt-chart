@@ -119,10 +119,16 @@ function App() {
       }
     ],
     linkDataArray: [
-      { key: -2, from: 2, to: 3 },
-      { key: -4, from: 4, to: 5 },
-      { key: -6, from: 2, to: 7 },
-      { key: -7, from: 7, to: 8 }
+      { from: 1, to: 2 },
+    { from: 1, to: 3 },
+    // { from: 2, to: 3, category: 'dep' },
+    { from: 3, to: 4 },
+    { from: 3, to: 5 },
+    // { from: 4, to: 5, category: 'dep' },
+    { from: 6, to: 7 },
+    // { from: 2, to: 7, category: 'dep' },
+    { from: 6, to: 8 },
+    // { from: 7, to: 8, category: 'dep' }
     ],
     modelData: {
       origin: 1672511400000,  // new Date(2023, 0, 1);
