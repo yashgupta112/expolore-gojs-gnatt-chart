@@ -189,62 +189,117 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
     // set your license key here before creating the diagram: go.Diagram.licenseKey = "...";
     // the left side of the whole diagram
     const myTasks =
-      new go.Diagram(
-        {
-          "undoManager.isEnabled": true,
-          model: this.sharedModel,
-          initialContentAlignment: go.Spot.Right,
-          padding: new go.Margin(TimelineHeight + 10, 0, 0, 0),
-          hasVerticalScrollbar: false,
-          allowMove: false,
-          allowCopy: false,
-          "commandHandler.deletesTree": true,
-          layout:
-            $(go.TreeLayout,
-              {
-                alignment: go.TreeLayout.AlignmentStart,
-                compaction: go.TreeLayout.CompactionNone,
-                layerSpacing: 28,
-                layerSpacingParentOverlap: 1,
-                nodeIndentPastParent: 1,
-                nodeSpacing: 10,
-                portSpot: go.Spot.Bottom,
-                childPortSpot: go.Spot.Left,
-                arrangementSpacing: new go.Size(0, 0)
-              }),
-          "animationManager.isInitial": false,
-          "TreeCollapsed": this.layoutGantt,
-          "TreeExpanded": this.layoutGantt,
-        });
-
-    myTasks.nodeTemplate =
-      $(go.Node, "Horizontal",
-        { height: 56 },
-        new go.Binding("isTreeExpanded").makeTwoWay(),
-        $("TreeExpanderButton", { portId: "", scale: 0.85 }),
-        $(go.TextBlock,
-          { editable: true },
-          new go.Binding("text").makeTwoWay()),
-        this.standardContextMenus()
-      );
-
-    myTasks.linkTemplate =
-      $(go.Link,
-        {
-          routing: go.Link.Orthogonal,
-          fromEndSegmentLength: 1,
-          toEndSegmentLength: 1
-        },
-        $(go.Shape)
-      );
-
-    myTasks.linkTemplateMap.add("Dep",
-      $(go.Link,  // ignore these links in the Tasks diagram
+      new go.Diagram({
+        "undoManager.isEnabled": true,
+        model: this.sharedModel,
+        initialContentAlignment: go.Spot.Right,
+        padding: new go.Margin(TimelineHeight + 10, 0, 0, 0),
+        hasVerticalScrollbar: false,
+        allowMove: false,
+        allowCopy: false,
+        "commandHandler.deletesTree": true,
+        layout: $(
+          go.TreeLayout,
+          {
+            alignment: go.TreeLayout.AlignmentStart,
+            compaction: go.TreeLayout.CompactionNone,
+            layerSpacing: 28,
+            layerSpacingParentOverlap: 1,
+            nodeIndentPastParent: 1,
+            nodeSpacing: 10,
+            portSpot: go.Spot.Bottom,
+            childPortSpot: go.Spot.Left,
+            arrangementSpacing: new go.Size(0, 0),
+          }
+        ),
+        "animationManager.isInitial": false,
+        "TreeCollapsed": this.layoutGantt,
+        "TreeExpanded": this.layoutGantt,
+      });
+  
+    // Add header to the myTasks diagram
+    // const myTasksHeader = $(
+    //   go.Part,
+    //   "Table", // Specify it as a Part of type Table
+    //   {
+    //     layerName: "Adornment", // This ensures it appears on a separate layer
+    //     pickable: false,
+    //     position: new go.Point(-26, 0), // Adjust as needed
+    //     columnSizing: go.Sizing.None,
+    //     selectionAdorned: false,
+    //     height: GridCellHeight,
+    //     background: "lightgray",
+    //   },
+    //   $(
+    //     go.RowColumnDefinition,
+    //     { column: 0, width: 14 }
+    //   ),
+    //   $(
+    //     go.RowColumnDefinition,
+    //     { column: 1 }
+    //   ),
+    //   $(
+    //     go.RowColumnDefinition,
+    //     { column: 2, width: 40, alignment: go.Spot.Right, separatorPadding: new go.Margin(0, 4), separatorStroke: "gray" }
+    //   ),
+    //   $(
+    //     go.RowColumnDefinition,
+    //     { column: 3, width: 40, alignment: go.Spot.Right, separatorPadding: new go.Margin(0, 4), separatorStroke: "gray" }
+    //   ),
+    //   $(
+    //     go.TextBlock,
+    //     "Name",
+    //     { column: 1, font: "bold 12pt sans-serif", margin: new go.Margin(2, 0, 2, 5) }
+    //   ),
+    //   $(
+    //     go.TextBlock,
+    //     "Start",
+    //     { column: 2, font: "bold 12pt sans-serif", margin: new go.Margin(2, 0, 2, 5) }
+    //   ),
+    //   $(
+    //     go.TextBlock,
+    //     "Dur.",
+    //     { column: 3, font: "bold 12pt sans-serif", margin: new go.Margin(2, 0, 2, 5) }
+    //   )
+    // );
+  
+    // myTasks.add(myTasksHeader);
+  
+    myTasks.nodeTemplate = $(
+      go.Node,
+      "Horizontal",
+      { height: 56 },
+      new go.Binding("isTreeExpanded").makeTwoWay(),
+      $("TreeExpanderButton", { portId: "", scale: 0.85 }),
+      $(
+        go.TextBlock,
+        { editable: true },
+        new go.Binding("text").makeTwoWay()
+      ),
+      this.standardContextMenus()
+    );
+  
+    myTasks.linkTemplate = $(
+      go.Link,
+      {
+        routing: go.Link.Orthogonal,
+        fromEndSegmentLength: 1,
+        toEndSegmentLength: 1,
+      },
+      $(go.Shape)
+    );
+  
+    myTasks.linkTemplateMap.add(
+      "Dep",
+      $(
+        go.Link, // ignore these links in the Tasks diagram
         { visible: false, isTreeLink: false }
-      ));
-
+      )
+    );
+  
     return myTasks;
   }
+  
 
   private initMyGantt(): go.Diagram {
     const $ = go.GraphObject.make;
@@ -289,7 +344,7 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
 
     myGantt.add($(go.Part, "Grid",
       { layerName: "Grid", position: new go.Point(-10, 0), gridCellSize: new go.Size(3000, GridCellHeight), defaultSeparatorPadding: 10 },
-      $(go.Shape, "LineH", { strokeWidth: 0.5 })
+      $(go.Shape, "LineH", { strokeWidth: 0.2 })
     ));
 
     myGantt.nodeTemplate =
@@ -361,7 +416,7 @@ export class DiagramWrapper extends React.Component<DiagramProps, {}> {
         $(go.Shape, { toArrow: "Standard", fill: "brown", strokeWidth: 0, scale: 0.75 })
       ));
 
-    // myGantt.add(this.myTimeline);
+    myGantt.add(this.myTimeline);
 
     return myGantt;
   }
